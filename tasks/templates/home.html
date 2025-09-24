@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Bienvenido a Nuestro Colegio{% endblock %}
+
+{% block content %}
+
+<header class="py-5">
+    <div class="container px-4 text-center">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <img src="{% static 'images/imagen.png' %}" alt="Insignia del Colegio" class="img-fluid mb-4" style="max-width: 150px;">
+                <h1 class="display-4 fw-bolder" style="font-family: Verdana, Geneva, Tahoma, sans-serif; color: black;">Bienvenidos a la I.E. Santísima Virgen De Guadalupe"</h1>
+                <a class="btn btn-lg mt-3" href="#about" style="background-color: #1fa657; ">Conoce más sobre nosotros</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section id="about" class="py-5" style="background-color: #f8f9fa; opacity: 0.9;">
+    <div class="container">
+        <div class="row gx-5 align-items-center">
+            <div class="col-lg-6">
+                <img src="{% static 'images/prici.png' %}" class="img-fluid rounded mb-4 mb-lg-0" alt="Instalaciones del colegio">
+            </div>
+            <div class="col-lg-6">
+                <h2 class="fw-bolder" style="font-family: Verdana, Geneva, Tahoma, sans-serif; color: black;">Nuestra Misión</h2>
+                <p class="lead" style="font-family: Verdana, Geneva, Tahoma, sans-serif; color: black;">Nuestra misión es proporcionar un ambiente de aprendizaje seguro, inclusivo y estimulante que fomente el crecimiento intelectual, social y emocional de cada estudiante. Buscamos inspirar una pasión por el aprendizaje para toda la vida y preparar a nuestros alumnos para enfrentar los desafíos del futuro con confianza y creatividad.</p>
+                <p>Utilizamos metodologías innovadoras y contamos con un personal docente altamente calificado y comprometido con la excelencia educativa.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5" style="opacity: 0.9;">
+    <div class="container">
+        <h2 class="text-center mb-5 fw-bolder" style="font-family: Verdana, Geneva, Tahoma, sans-serif; color: black;">Nuestros Pilares</h2>
+        <div class="row">
+            <div class="col-md-4 text-center mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <i class="bi bi-book-half fs-1 text-primary"></i>
+                        <h4 class="card-title mt-3" style="font-family: Verdana, Geneva, Tahoma, sans-serif; color: black;">Excelencia Académica</h4>
+                        <p class="card-text">Currículo riguroso y actualizado que desafía a nuestros estudiantes a alcanzar su máximo potencial.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                 <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <i class="bi bi-dribbble fs-1" style="color: #b17c54;"></i>
+                        <h4 class="card-title mt-3" style="font-family: Verdana, Geneva, Tahoma, sans-serif; color: black;">Deportes y Arte</h4>
+                        <p class="card-text" style="font-family: Verdana, Geneva, Tahoma, sans-serif; color: black;">Fomentamos el desarrollo integral a través de una amplia variedad de actividades deportivas y culturales.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-center mb-4">
+                 <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <i class="bi bi-heart-pulse-fill fs-1 text-danger"></i>
+                        <h4 class="card-title mt-3" style="font-family: Verdana, Geneva, Tahoma, sans-serif; color: black;">Valores y Comunidad</h4>
+                        <p class="card-text" style="font-family: Verdana, Geneva, Tahoma, sans-serif; color: black;">Inculcamos valores como el respeto, la responsabilidad y la empatía en un ambiente de comunidad unida.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="bg-dark text-light pt-5 pb-3">
+  <div class="container">
+    <div class="row gy-4">
+      <!-- Info del colegio -->
+      <div class="col-md-4">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'images/imagen.png' %}" width="50" height="50">
+        </a>
+        <h5 class="fw-bolder">I.E. Santísima Virgen De Guadalupe</h5>
+        <p class="small mb-0">Educando con valores y excelencia. Formación integral para el futuro.</p>
+      </div>
+
+      <!-- Contacto -->
+      <div class="col-md-4">
+        <h6 class="fw-bolder">Contacto</h6>
+        <ul class="list-unstyled small mb-0">
+          <li class="mb-2">
+            <i class="bi bi-telephone-fill me-2" aria-hidden="true"></i>
+            <a href="tel:+5111234567" class="text-decoration-none text-light">(+51) 1 123 4567</a>
+          </li>
+          <li class="mb-2">
+            <i class="bi bi-envelope-fill me-2" aria-hidden="true"></i>
+            <a href="mailto:contacto@colegio.edu.pe" class="text-decoration-none text-light">contacto@colegio.edu.pe</a>
+          </li>
+          <li>
+            <i class="bi bi-geo-alt-fill me-2" aria-hidden="true"></i>
+            Av. Progreso 225, Piura
+          </li>
+        </ul>
+      </div>
+
+      <!-- Redes sociales y suscripción -->
+      <div class="col-md-4">
+        <h6 class="fw-bolder">Redes Sociales</h6>
+
+        <!-- Botones sociales -->
+        <p class="mb-3">
+          <a href="https://www.facebook.com/laobrilla.laobrilla/" class="btn btn-outline-light btn-sm rounded-circle social-btn p-0" target="_blank" rel="noopener" aria-label="Facebook">
+            <img src="{% static 'images/facebook.png' %}" alt="Facebook" class="social-img">
+          </a>
+          <a href="https://www.youtube.com/@virgendeguadalupelaobrilla6749" class="btn btn-outline-light btn-sm rounded-circle social-btn p-0" target="_blank" rel="noopener" aria-label="Youtube">
+            <img src="{% static 'images/youtube.png' %}" alt="Youtube" class="social-img">
+          </a>
+          <a href="https://www.tiktok.com/@s.v.g_15185_laobrilla" class="btn btn-outline-light btn-sm rounded-circle social-btn p-0" target="_blank" rel="noopener" aria-label="Tiktok">
+            <img src="{% static 'images/tiktok.png' %}" alt="Tiktok" class="social-img">
+          </a>
+        </p>
+
+      </div>
+    </div>
+
+    <hr class="border-light mt-4">
+
+    <div class="row">
+      <div class="col text-center small">
+        <p class="mb-0">© {% now "Y" %} I.E. Santísima Virgen De Guadalupe. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+
+
+{% endblock %}
+

@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% load static %} 
+{% block content %}
+
+<style>
+  body {
+    background-image: url("{% static 'images/escritotio.jpg' %}");
+    background-repeat: no-repeat; 
+    background-size: cover;
+    background-position: center; 
+    background-attachment: fixed;
+  }
+</style>
+
+<div class="container py-4">
+  &nbsp;
+  <h1 class="h3 mb-4" style="text-align: center; font-family: Verdana, Geneva, Tahoma, sans-serif; color: black;"> <strong>REGISTROS DIARIOS</strong></h1>
+  {% if registro %}
+  <div class="row g-3">
+    {% for r in registro %}
+    <div class="col-12 col-sm-6 col-md-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body d-flex flex-column" style="background: linear-gradient(135deg,rgba(253, 229, 176, 0.541) 0%, #ffffff5d 100%);">
+          <div class="d-flex justify-content-between mb-2">
+            <div>
+              <h5 class="card-title mb-0">
+                {% if r.stress_level != None %}
+                  {% if r.stress_level <= 3  %}
+                    😊
+                  {% elif r.stress_level <= 6 %}
+                    😐
+                  {% else %}
+                    😢
+                  {% endif %}
+                {% endif %}
+                {{ r.title|default:"(Sin título)" }}
+              </h5>
+              <small class="text-muted">{{ r.user.username }}</small>
+            </div>
+            <div class="text-end">
+              {% if r.created %}
+                <small class="text-muted d-block">{{ r.created|date:"d/m/Y H:i" }}</small>
+              {% endif %}
+              {% if r.stress_level != None %}
+                {% if r.stress_level <= 3 %}
+                  <span class="badge bg-success">Bajo</span>
+                {% elif r.stress_level <= 6 %}
+                  <span class="badge bg-warning text-dark">Medio</span>
+                {% else %}
+                  <span class="badge bg-danger">Alto</span>
+                {% endif %}
+              {% endif %}
+            </div>
+          </div>
+
+          <p class="card-text mb-3">
+            {{ r.description|default:"(Sin descripción)"|truncatechars:120 }}
+          </p>
+
+          <div class="mt-auto d-flex align-items-center justify-content-between">
+            <a href="{% url 'registros_detalle' r.id %}" class="btn btn-sm btn-outline-success">Ver / Editar</a>
+            <small class="text-muted">
+              {% if r.mood %}{{ r.mood }}{% endif %}
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Resumen general -->
+  <div class="card mt-4 shadow-sm">
+    <div class="card-body" style="background: linear-gradient(135deg,rgba(253, 229, 176, 0.541) 0%, #ffffff5d 100%);">
+      {% with total=registro|length promedio=registro|average:"stress_level" %}
+        <h5 class="mb-2" style="text-align: center;">Resumen general</h5>
+        <p class="mb-0">
+          {% if promedio <= 3 %}
+            Estado general: 😊 Relajado
+          {% elif promedio <= 6 %}
+            Estado general: 😐 Moderado
+          {% else %}
+            Estado general: 😢 Estresado
+          {% endif %}
+        </p>
+        <small class="text-muted">Registros totales: {{ total }}</small>
+      {% endwith %}
+    </div>
+  </div>
+  {% else %}
+    <div class="alert alert-info">No tienes registros todavía.</div>
+  {% endif %}
+  <!-- Tecnicas de relajacion -->
+<div class="card mt-4 shadow-sm">
+  <div class="card-body" style="background: linear-gradient(135deg,rgba(253, 229, 176, 0.541) 0%, #ffffff5d 100%);">
+    <h5 class="mb-4 text-center">Técnicas de Relajación</h5>
+    <div class="row">
+      <!-- Video 1 -->
+      <div class="col-lg-6 text-center mb-4">
+        <h5 class="mb-3">Técnicas de Respiración</h5>
+        <iframe width="100%" height="315"
+          src="https://www.youtube.com/embed/EGO5m_DBzF8"
+          title="RESPIRACIÓN para REDUCIR la ANSIEDAD 🌱 Técnica 478"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <!-- Video 2 -->
+      <div class="col-lg-6 text-center mb-4">
+        <h5 class="mb-3">Ejercicios de Relajación</h5>
+        <iframe width="100%" height="315"
+          src="https://www.youtube.com/embed/XT9VEY-pra0"
+          title="Ejercicios de Relajación"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+

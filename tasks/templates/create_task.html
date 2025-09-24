@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %} 
+{% block content %}
+
+<style>
+  body {
+    background-image: url("{% static 'images/escritotio.jpg' %}");
+    background-repeat: no-repeat; 
+    background-size: cover;
+    background-position: center; 
+    background-attachment: fixed;
+  }
+</style>
+<div class="container py-5" >
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+
+            <div class="card shadow-sm" style="background: linear-gradient(135deg,rgba(176, 238, 253, 0.658) 0%, #ffffffb6 100%);">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start mb-3">
+                        <div class="me-3">
+                            <div class="avatar bg-success text-white rounded-circle d-flex align-items-center justify-content-center"
+                                style="width:48px;height:48px;font-weight:600;">
+                                🔍
+                            </div>
+                        </div>
+                        <div style="font-family: Verdana, Geneva, Tahoma, sans-serif; color: black;">
+                            <h4 class="mb-0" >Ingresar registro diario</h4>
+                            <small class="text-muted">Anota cómo te sientes hoy — esto ayuda a controlar tu
+                                estrés</small>
+                        </div>
+                    </div>
+
+                    {% if error %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                    {% endif %}
+
+                    <form method="post" action="{% url 'create_task' %}" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Título -->
+                        <div class="mb-3">
+                            <label for="{{ form.title.id_for_label }}" class="form-label">Título</label>
+                            {{ form.title }}
+                            {% if form.title.errors %}
+                            <div class="form-text text-danger">{{ form.title.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Descripción -->
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">Descripción</label>
+                            {{ form.description }}
+                            <div class="form-text">Máx. 500 caracteres (recomendado).</div>
+                            {% if form.description.errors %}
+                            <div class="form-text text-danger">{{ form.description.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Nivel de estres -->
+                        <div class="mb-3">
+                            <label for="{{ form.stress_level.id_for_label }}" class="form-label">Nivel de estrés
+                                (0-10)</label>
+                            {{ form.stress_level }}
+                            <div id="stressValue" class="mt-2 fw-bold"></div>
+                            {% if form.stress_level.errors %}
+                            <div class="form-text text-danger">{{ form.stress_level.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-success">Guardar</button>
+                            <a href="{% url 'tasks' %}" class="btn btn-outline-secondary">Volver</a>
+                            <button type="reset" class="btn btn-light ms-auto">Limpiar</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+            <p class="text-center  small mt-3" style="font-family: Verdana, Geneva, Tahoma, sans-serif;">Registra algo breve que puedas revisar después — pequeño
+                progreso diario.</p>
+        </div>
+    </div>
+</div>
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const slider = document.getElementById("{{ form.stress_level.id_for_label }}");
+    const display = document.getElementById("stressValue");
+
+    function updateValue(val) {
+      const value = parseInt(val);
+      let emoji = '';
+      let color = '';
+
+      if (value <= 3) {
+        emoji = '😊 Relajado';
+        color = 'green';
+      } else if (value <= 6) {
+        emoji = '😐 Moderado';
+        color = 'orange';
+      } else {
+        emoji = '😰 Estresado';
+        color = 'red';
+      }
+
+      display.textContent = `Nivel: ${value} — ${emoji}`;
+      display.style.color = color;
+      display.style.fontWeight = '600';
+      display.style.fontSize = '1.1rem';
+    }
+
+    // Inicializa valor y color
+    updateValue(slider.value);
+
+    // Actualiza al mover slider
+    slider.addEventListener('input', () => {
+      updateValue(slider.value);
+    });
+  });
+</script>
+{% endblock %}
