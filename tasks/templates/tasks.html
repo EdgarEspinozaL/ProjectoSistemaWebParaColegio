@@ -75,6 +75,33 @@
     <div class="card-body" style="background: linear-gradient(135deg,rgba(253, 229, 176, 0.541) 0%, #ffffff5d 100%);">
       {% with total=registro|length promedio=registro|average:"stress_level" %}
         <h5 class="mb-2" style="text-align: center;">Resumen general</h5>
+         <p>
+            <strong>Promedio semanal:</strong>
+            {{ promedio_semanal|floatformat:1 }}
+
+          {% if promedio_semanal <= 3 %}
+            😊
+          {% elif promedio_semanal <= 6 %}
+            😐
+          {% else %}
+            😰
+          {% endif %}
+        </p>
+
+      <!-- Promedio mensual -->
+        <p>
+          <strong>Promedio mensual:</strong>
+          {{ promedio_mensual|floatformat:1 }}
+
+          {% if promedio_mensual <= 3 %}
+            😊
+          {% elif promedio_mensual <= 6 %}
+            😐
+          {% else %}
+            😰
+          {% endif %}
+        </p>
+
         <p class="mb-0">
           {% if promedio <= 3 %}
             Estado general: 😊 Relajado
@@ -91,6 +118,66 @@
   {% else %}
     <div class="alert alert-info">No tienes registros todavía.</div>
   {% endif %}
+
+
+<div class="card mt-4 shadow-sm">
+  <div class="card-body" style="background: linear-gradient(135deg,rgba(253, 229, 176, 0.541) 0%, #ffffff5d 100%);">
+
+    <h5 class="text-center mb-3">📅 Tareas pendientes</h5>
+
+    <form method="POST" action="{% url 'crear_tarea' %}">
+      {% csrf_token %}
+
+      <div class="row g-2">
+
+        <div class="col-md-6">
+          <input type="text" name="titulo" class="form-control" placeholder="Nueva tarea" required>
+        </div>
+
+        <div class="col-md-4">
+          <input type="date" name="fecha" class="form-control" required>
+        </div>
+
+        <div class="col-md-2">
+          <button class="btn btn-success w-100">Agregar</button>
+        </div>
+
+      </div>
+
+    </form>
+
+    <ul class="list-group mt-3">
+
+      {% for t in tareas %}
+
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+
+        <span style="{% if t.completada %}text-decoration: line-through{% endif %}">
+          {{ t.titulo }} - {{ t.fecha }}
+        </span>
+
+        <div>
+
+          <a href="{% url 'completar_tarea' t.id %}" class="btn btn-sm btn-outline-success">
+            ✔
+          </a>
+
+          <a href="{% url 'eliminar_tarea' t.id %}" class="btn btn-sm btn-outline-danger">
+            ✖
+          </a>
+
+        </div>
+
+      </li>
+
+      {% endfor %}
+
+    </ul>
+
+  </div>
+</div>
+
+
   <!-- Tecnicas de relajacion -->
 <div class="card mt-4 shadow-sm">
   <div class="card-body" style="background: linear-gradient(135deg,rgba(253, 229, 176, 0.541) 0%, #ffffff5d 100%);">

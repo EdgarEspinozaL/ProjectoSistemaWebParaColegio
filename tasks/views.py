@@ -7,7 +7,10 @@ from .forms import TaskForm
 from .models import RegistrosDiarios
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-
+from django.db.models import Avg
+from django.utils import timezone
+from datetime import timedelta
+from .models import Tarea
 
 
 # Create your views here.
@@ -26,7 +29,7 @@ def signup(request):
     else:
         if request.POST['password1'] == request.POST['password2']:
             try:
-                # register user
+                # Registrar el nuevo usuario
                 user = User.objects.create_user(
                     username=request.POST['username'], password=request.POST['password1'])
                 user.save()
@@ -44,8 +47,46 @@ def signup(request):
 
 @login_required
 def tasks(request):
-    registros = RegistrosDiarios.objects.filter(user=request.user)
-    return render(request, 'tasks.html', {'registro': registros})
+
+    tareas = Tarea.objects.filter(user=request.user).order_by('fecha')
+
+    registros = RegistrosDiarios.objects.filter(
+        user=request.user
+    ).order_by('-created')
+
+    hoy = timezone.now()
+
+    # Ultimos 7 días
+    inicio_semana = hoy - timedelta(days=7)
+
+    promedio_semanal = RegistrosDiarios.objects.filter(
+        user=request.user,
+        created__gte=inicio_semana
+    ).aggregate(promedio=Avg('stress_level'))['promedio']
+
+    # Ultimos 30 días
+    inicio_mes = hoy - timedelta(days=30)
+
+    promedio_mensual = RegistrosDiarios.objects.filter(
+        user=request.user,
+        created__gte=inicio_mes
+    ).aggregate(promedio=Avg('stress_level'))['promedio']
+
+
+    # Evitar None
+    if promedio_semanal is None:
+        promedio_semanal = 0
+
+    if promedio_mensual is None:
+        promedio_mensual = 0
+
+
+    return render(request, 'tasks.html', {
+        'registro': registros,
+        'promedio_semanal': promedio_semanal,
+        'promedio_mensual': promedio_mensual,
+        'tareas': tareas
+    })
 
 
 @login_required
@@ -106,6 +147,39 @@ def signin(request):
         else:
             login(request, user)
             return redirect('tasks')
+
+
+@login_required
+def crear_tarea(request):
+    if request.method == 'POST':
+        titulo = request.POST['titulo']
+        fecha = request.POST['fecha']
+
+        Tarea.objects.create(
+            user=request.user,
+            titulo=titulo,
+            fecha=fecha
+        )
+
+    return redirect('tasks')
+
+@login_required
+def completar_tarea(request, tarea_id):
+
+    tarea = get_object_or_404(Tarea, id=tarea_id, user=request.user)
+
+    tarea.completada = not tarea.completada
+    tarea.save()
+
+    return redirect('tasks')
+
+@login_required
+def eliminar_tarea(request, tarea_id):
+
+    tarea = get_object_or_404(Tarea, id=tarea_id, user=request.user)
+    tarea.delete()
+
+    return redirect('tasks')
         
 
 
